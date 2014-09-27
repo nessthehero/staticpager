@@ -20,7 +20,7 @@
     }
   ],
   "dependencies": {
-    "jquery": "latest"
+    "jquery": ">1.9"
   },
   "keywords": [
     "jquery-plugin"
