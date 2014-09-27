@@ -14,26 +14,26 @@ Download the [production version][min] or the [development version][max].
 In your web page:
 
 ```html
-<script src="jquery.js"></script>
-<script src="staticpager.min.js"></script>
-<script>
-    jQuery(function($) {
-      $("#pager").staticpager();
-      // target a container that contains an unordered list
-    });
-</script>
-
 <div id="pager">
-	<ul>
-		<li data-filter="2">Item 1</li>
+    <ul>
+        <li data-filter="2">Item 1</li>
         <li data-filter="2|3">Item 2</li>
         <li data-filter="4|6">Item 3</li>
         <li data-filter="7">Item 4</li>
         <li data-filter="">Item 5</li>
         <li data-filter="8">Item 6</li>
         <li data-filter="2">Item 7</li>
-	</ul>
+    </ul>
 </div>
+
+<script src="jquery.js"></script>
+<script src="staticpager.min.js"></script>
+<script>
+    jQuery(function($) {
+      $("#pager").pager();
+      // target a container that contains an unordered list
+    });
+</script>
 ```
 
 ## Documentation
