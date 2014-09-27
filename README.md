@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/nessthehero/staticpager.svg?branch=master)](https://travis-ci.org/nessthehero/staticpager)
+
 # Static Pager
 
 Use static paging for unordered lists of content
@@ -15,9 +17,10 @@ In your web page:
 <script src="jquery.js"></script>
 <script src="staticpager.min.js"></script>
 <script>
-jQuery(function($) {
-  $("#pager").staticpager(); // target a container that contains an unordered list
-});
+    jQuery(function($) {
+      $("#pager").staticpager();
+      // target a container that contains an unordered list
+    });
 </script>
 
 <div id="pager">
