@@ -173,8 +173,6 @@
 				pageSize: 2
 			};
 
-			$('#pager').pager(this.settings);
-
 			this.pagerReference = $('#pager').pager(this.settings);
 
 			this.pIndex = 1;
@@ -182,6 +180,8 @@
 	});
 
 	test("Applying filter", function () {
+
+		ok($("#pager").length, "Pager exists");
 
 		equal($('.pageList').length, 4, "Has four pages");
 
@@ -193,7 +193,7 @@
 
 		equal($('.pageList').length, 2, "Has two pages");
 
-		p.filter(["2", "3"]);
+		p.filter(["3"]);
 
 		equal($('.pageList').length, 0, "Has no pages");
 

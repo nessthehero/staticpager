@@ -88,20 +88,24 @@
 						if (cat.length !== 0) {
 							base.$el.find('li').each(function () {
 
-								var tax = $(this).attr('data-filter').split(base.options.delimiter);
-								var found = false;
+								if ($(this).attr('data-filter') !== null && typeof $(this).attr('data-filter') !== "undefined" && $(this).attr('data-filter') !== "") {
 
-							for (var j in tax) {
-								for (var k in cat) {
-									if (cat[k] === tax[j]) {
-										found = true;
+									var tax = $(this).attr('data-filter').split(base.options.delimiter);
+									var found = false;
+
+									for (var j in tax) {
+										for (var k in cat) {
+											if (cat[k] === tax[j]) {
+												found = true;
+											}
+										}
 									}
-								}
-							}
 
-							if (!found) {
-								$(this).remove();
-							}
+									if (!found) {
+										$(this).remove();
+									}
+
+								}
 
 							});
 						}
