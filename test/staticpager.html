@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Static Pager Test Suite</title>
+  <!-- Load local jQuery. -->
+  <script src="../bower_components/jquery/dist/jquery.js"></script>
+  <!-- Load local QUnit. -->
+  <link rel="stylesheet" href="../bower_components/qunit/qunit/qunit.css" media="screen">
+  <script src="../bower_components/qunit/qunit/qunit.js"></script>
+  <!-- Load local lib and tests. -->
+  <script src="../src/staticpager.js"></script>
+  <script src="staticpager_test.js"></script>
+  <!-- Removing access to jQuery and $. But it'll still be available as _$, if
+       you REALLY want to mess around with jQuery in the console. REMEMBER WE
+       ARE TESTING A PLUGIN HERE, THIS HELPS ENSURE BEST PRACTICES. REALLY. -->
+  <script>window._$ = jQuery.noConflict(true);</script>
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture">
+    <div id="pager">
+      <ul>
+        <li data-filter="2">Item 1</li>
+        <li data-filter="2|3">Item 2</li>
+        <li data-filter="4|6">Item 3</li>
+        <li data-filter="7">Item 4</li>
+        <li data-filter="">Item 5</li>
+        <li data-filter="8">Item 6</li>
+        <li data-filter="2">Item 7</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
