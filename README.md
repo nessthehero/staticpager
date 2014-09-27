@@ -69,7 +69,7 @@ $("#pager").destroy();
 Pass an array of strings to the pager to filter it based on the data-filter attribute on each list item.
 
 ```javascript
-$("#pager").update(["2", "3"]);
+$("#pager").update(["2", "4"]);
 ```
 
 ## Release History
