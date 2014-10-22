@@ -38,13 +38,13 @@
 		notEqual($('#pager').length, 0, "Detect paging container");
 		equal($('.pageList').length, 4, "Has four pages");
 
-		ok(window.pager, "Seeing the global pager object");
+		ok(window.staticpager, "Seeing the global pager object");
 
-		ok(window.pager[0], "Global pager object has stuff");
+		ok(window.staticpager[0], "Global pager object has stuff");
 
-		ok(window.pager[0].p, "Found a pager in the global object");
+		ok(window.staticpager[0].p, "Found a pager in the global object");
 
-		ok(window.pager[0].p.$el.is(this.pagerReference), "It's the pager we're using!");
+		ok(window.staticpager[0].p.$el.is(this.pagerReference), "It's the pager we're using!");
 
 	});
 
@@ -185,9 +185,9 @@
 
 		equal($('.pageList').length, 4, "Has four pages");
 
-		ok(window.pager[0].p.$el.is(this.pagerReference), "It's the pager we're using!");
+		ok(window.staticpager[0].p.$el.is(this.pagerReference), "It's the pager we're using!");
 
-		var p = window.pager[0].p;
+		var p = window.staticpager[0].p;
 
 		p.filter(["2"]);
 
