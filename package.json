@@ -22,7 +22,8 @@
     }
   ],
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "postinsall": "bower install"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "~0.7.2",
