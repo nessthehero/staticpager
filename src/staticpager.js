@@ -23,6 +23,100 @@
 		return s;
 	}
 
+	// Hash parsing
+	function h() {
+
+		var vars = [],
+			grabUrl = window.location.hash,
+			parts,
+			pieces,
+			qs = '';
+
+		if (typeof arguments[0] === 'string') {
+			qs = arguments[0];
+		}
+
+		if (typeof grabUrl !== 'undefined' && grabUrl !== '') {
+			grabUrl = grabUrl.replace('#', '');
+			parts = grabUrl.split('&');
+			for (var j in parts) {
+				if (parts.hasOwnProperty(j)) {
+					pieces = parts[j].split('=');
+					if (vars.length !== 0) {
+						var found = false;
+						for (var i in vars) {
+							if (vars.hasOwnProperty(i)) {
+
+								if (vars[i].name === pieces[0].toString()) {
+									found = true;
+								}
+							}
+						}
+						if (found) {
+							vars[i].values.push(pieces[1]);
+						} else {
+							vars.push({ 'name' : pieces[0].toString(), 'values' : [pieces[1]] });
+						}
+					} else {
+						vars.push({ 'name' : pieces[0].toString(), 'values' : [pieces[1]] });
+					}
+				}
+			}
+			if (qs !== '') {
+				for (var b in vars) {
+					if (vars.hasOwnProperty(b)) {
+						if (vars[b].name === qs) {
+							return vars[b].values;
+						}
+					}
+				}
+				return ['-1'];
+			}
+			return vars;
+		} else {
+			return [];
+		}
+
+	}
+
+	function tH(hashObject) {
+
+		var h = hashObject,
+			b = '',
+			c = 0,
+			cc = 0;
+
+		for (var j in h) {
+			if (h.hasOwnProperty(j)) {
+				c += 1;
+
+				var name = h[j].name,
+					vals = h[j].values;
+
+					cc = 0;
+
+				for (var k in vals) {
+					if (vals.hasOwnProperty(k)) {
+						cc += 1;
+						b += name + "=" + vals[k];
+
+						if (cc !== vals.length) {
+							b += "&amp;";
+						}
+					}
+				}
+
+				if (c !== h.length) {
+					b += "&amp;";
+				}
+
+			}
+		}
+
+		return b;
+
+	}
+
 	/* IndexOf polyfill */
 	if (!Array.prototype.indexOf) {
 		Array.prototype.indexOf = function(searchElement, fromIndex) {
@@ -122,7 +216,26 @@
 			base.count.results = base.$el.find('li').length;
 			base.count.pages = Math.ceil(base.count.results / base.options.pageSize);
 
-			base.pIndex = 1; // TODO make this work based on Hash or options. #HASH
+			if (h(base.options.hashQuery).length > 0) {
+				base.pIndex = parseInt(h(base.options.hashQuery)[0], 10);
+			} else {
+				base.pIndex = 1;
+			}
+
+			if (base.pIndex == 1) {
+				if (base.options.pageStart !== 1) {
+					base.pIndex = parseInt(base.options.pageStart, 10);
+				}
+			}
+
+			if (base.pIndex > base.count.pages) {
+				base.pIndex = base.count.pages;
+			}
+
+			if (base.pIndex < 1) {
+				base.pIndex = 1;
+			}
+
 			base.pages = [];
 
 			// Render caching
@@ -138,11 +251,6 @@
 
 				base.build();
 
-				// TODO: Make this a bit better. I'm just kindof assuming we're on page 1 when we start.
-				// If I ever want to add in some sort of hash based page jumping, I'll need to improve this.
-				$('.next', base.$el).css('visibility', 'visible');
-				$('.prev', base.$el).css('visibility', 'hidden');
-
 				// Watch for events
 				$('.prev, .pager, .next', base.$el).on("click", function() {
 
@@ -156,60 +264,7 @@
 						base.pIndex = parseInt($(this).text(), 10);
 					}
 
-					$('.pagingListItem', base.$el).css('display', 'none'); //Hide every pagingListItem.
-					$('#page' + base.pIndex, base.$el).css('display', 'block'); //Reveal the desired pagingListItem.
-					$('#currentPage', base.$el).text(base.pIndex);
-					$('#resultStart', base.$el).text((base.pIndex * base.options.pageSize) - (base.options.pageSize - 1));
-					if (base.pIndex === base.count.pages) {
-						$('#resultEnd', base.$el).text(base.count.results);
-					} else {
-						$('#resultEnd', base.$el).text(base.pIndex * base.options.pageSize);
-					}
-
-					//Just some logic for handling the first and last pages.
-					if (base.pIndex === base.count.pages) {
-						$('.next', base.$el).css('visibility', 'hidden');
-						$('.prev', base.$el).css('visibility', 'visible');
-					} else if (base.pIndex === 1) {
-						$('.next', base.$el).css('visibility', 'visible');
-						$('.prev', base.$el).css('visibility', 'hidden');
-					} else {
-						$('.next', base.$el).css('visibility', 'visible');
-						$('.prev', base.$el).css('visibility', 'visible');
-					}
-
-					if (!base.options.truncate) {
-						$('.tInd, .bInd', base.$el).hide(); //.css('display','none');//Hide all spans.
-						$('.pager', base.$el).css('display', 'inline'); //Reveal all links.
-						$('#tPager' + base.pIndex + ', #bPager' + base.pIndex, base.$el).css('display', 'none'); //Hide the page link for the newly exposed page.
-						$('#tInd' + base.pIndex + ', #bInd' + base.pIndex, base.$el).css('display', 'inline'); //Reveal the span for the newly exposed page.
-					} else {
-
-						$('#top_fEllip, #bot_fEllip, #top_lEllip, #bot_lEllip, .pager, .tInd, .bInd', base.$el).css('display', 'none');
-
-						if (base.pIndex > 4) {
-							$('#top_fEllip, #bot_fEllip', base.$el).css('display', 'inline');
-						}
-
-						// Show ellipses if NOT on 4th to last page or greater
-						// This is so we get
-						//         prev 1 2 ... 45 '46' 47 48 49 next
-						// and not
-						//         prev 1 2 ... 45 '46' 47 ... 48 49 next
-						if (base.pIndex < (base.count.pages - 3)) {
-							$('#top_lEllip, #bot_lEllip', base.$el).css('display', 'inline');
-						}
-
-						for (j = 1; j <= base.count.pages; j += 1) {
-							// this page               last page              next page           2 or less             last 2 pages
-							if (j === base.pIndex || j === (base.pIndex - 1) || j === (base.pIndex + 1) || j <= 2 || j >= (base.count.pages - 1)) {
-								$('#bPager' + j + ', #tPager' + j, base.$el).css('display', 'inline');
-							}
-						}
-
-						$('#tPager' + base.pIndex + ', #bPager' + base.pIndex, base.$el).css('display', 'none'); //Hide the page link for the newly exposed page.
-						$('#tInd' + base.pIndex + ', #bInd' + base.pIndex, base.$el).css('display', 'inline'); //Reveal the span for the newly exposed page.
-					}
+					base.pageState();
 
 					base.options.after($(this).selector, base);
 
@@ -218,11 +273,6 @@
 				});
 
 				$('.showAllItems', base.$el).on('click', function() {
-					/*$('.result', base.$el).each(function(index) {
-					$(this, base.$el).appendTo($('.result-holder'));
-				});
-				$('#bottomPaging, #topPaging, .pagingListItem', base.$el).remove();*/
-
 					base.destroy();
 				});
 
@@ -279,7 +329,7 @@
 			status = $(t(base.templates.status, {
 				pageIndex: base.pIndex,
 				pageCount: base.count.pages,
-				resultStart: 1, // #HASH: Will change based on Hash or options. Set to Hash or option's value.
+				resultStart: base.pIndex, // #HASH: Will change based on Hash or options. Set to Hash or option's value.
 				resultEnd: base.options.pageSize, // #HASH: Will change based on Hash or options. Multiplied by Hash/option value and self
 				resultCount: base.count.results
 			}));
@@ -334,41 +384,76 @@
 					$('#bottomPaging .rightSide', base.$el).append('<span id="bot_lEllip">...</span>');
 				}
 
-				//Since we are starting on page 1, we will hide all subsequent pages.
-				if (i > 1) {
-					$('#page' + i).css('display', 'none');
-				}
 			}
-			$('#tPager1, #bPager1, #top_fEllip, #bot_fEllip', base.$el).css('display', 'none'); //Since we are starting on page 1, we will hide the first paging links in both the top and bottom nav.
-			$('#tInd1, #bInd1', base.$el).css('display', 'inline'); //Since we are starting on page 1, we will reveal the span tag for the first page status in both the top and bottom nav.
-			$('#bottomPaging span[id^="bInd"]', base.$el).each(function(index) {
-				if (index !== 0) {
-					$(this).hide();
-				}
-			});
 
-			$('#topPaging span[id^="tInd"]', base.$el).each(function(index) {
-				if (index !== 0) {
-					$(this).hide();
-				}
-			});
+			$('.paging .rightSide', base.$el).append('<a href="#" class="next">' + base.options.nextText + '</a>');
 
-			$('.paging .rightSide', base.$el).append('<a href="#" class="next">' + base.options.nextText + '</a>'); //Stick a 'next' link on the end. This 1 line works for both top and bottom.
-			$('.pagingListItem', base.$el).css('display', 'none'); //Hide every pagingListItem.
-			$('#page' + base.pIndex, base.$el).css('display', 'block'); //Reveal the desired pagingListItem.
-			if (base.options.truncate) {
-				for (key in base.pages) {
-					if (base.pages.hasOwnProperty(key)) {
-						if (key > 3 && key < (base.count.pages - 1)) {
-							$('#tPager' + key + ',#tInd' + key + ',#bPager' + key + ',#bInd').css('display', 'none');
-						}
-					}
-				}
-			}
+			base.pageState();
 
 			base.options.end();
 
 		};
+
+		base.pageState = function() {
+
+			$('.pagingListItem', base.$el).css('display', 'none'); //Hide every pagingListItem.
+			$('#page' + base.pIndex, base.$el).css('display', 'block'); //Reveal the desired pagingListItem.
+			$('#currentPage', base.$el).text(base.pIndex);
+			$('#resultStart', base.$el).text((base.pIndex * base.options.pageSize) - (base.options.pageSize - 1));
+			if (base.pIndex === base.count.pages) {
+				$('#resultEnd', base.$el).text(base.count.results);
+			} else {
+				$('#resultEnd', base.$el).text(base.pIndex * base.options.pageSize);
+			}
+
+			//Just some logic for handling the first and last pages.
+			if (base.pIndex === base.count.pages) {
+				$('.next', base.$el).css('visibility', 'hidden');
+				$('.prev', base.$el).css('visibility', 'visible');
+			} else if (base.pIndex === 1) {
+				$('.next', base.$el).css('visibility', 'visible');
+				$('.prev', base.$el).css('visibility', 'hidden');
+			} else {
+				$('.next', base.$el).css('visibility', 'visible');
+				$('.prev', base.$el).css('visibility', 'visible');
+			}
+
+			window.location.hash = base.options.hashQuery + "=" + base.pIndex;
+
+			if (!base.options.truncate) {
+				$('.tInd, .bInd', base.$el).hide(); //.css('display','none');//Hide all spans.
+				$('.pager', base.$el).css('display', 'inline'); //Reveal all links.
+				$('#tPager' + base.pIndex + ', #bPager' + base.pIndex, base.$el).css('display', 'none'); //Hide the page link for the newly exposed page.
+				$('#tInd' + base.pIndex + ', #bInd' + base.pIndex, base.$el).css('display', 'inline'); //Reveal the span for the newly exposed page.
+			} else {
+
+				$('#top_fEllip, #bot_fEllip, #top_lEllip, #bot_lEllip, .pager, .tInd, .bInd', base.$el).css('display', 'none');
+
+				if (base.pIndex > 4) {
+					$('#top_fEllip, #bot_fEllip', base.$el).css('display', 'inline');
+				}
+
+				// Show ellipses if NOT on 4th to last page or greater
+				// This is so we get
+				//         prev 1 2 ... 45 '46' 47 48 49 next
+				// and not
+				//         prev 1 2 ... 45 '46' 47 ... 48 49 next
+				if (base.pIndex < (base.count.pages - 3)) {
+					$('#top_lEllip, #bot_lEllip', base.$el).css('display', 'inline');
+				}
+
+				for (j = 1; j <= base.count.pages; j += 1) {
+					// this page               last page              next page           2 or less             last 2 pages
+					if (j === base.pIndex || j === (base.pIndex - 1) || j === (base.pIndex + 1) || j <= 2 || j >= (base.count.pages - 1)) {
+						$('#bPager' + j + ', #tPager' + j, base.$el).css('display', 'inline');
+					}
+				}
+
+				$('#tPager' + base.pIndex + ', #bPager' + base.pIndex, base.$el).css('display', 'none'); //Hide the page link for the newly exposed page.
+				$('#tInd' + base.pIndex + ', #bInd' + base.pIndex, base.$el).css('display', 'inline'); //Reveal the span for the newly exposed page.
+			}
+
+		}
 
 		base.destroy = function() {
 
@@ -396,6 +481,7 @@
 
 	$.pager.defaultOptions = {
 		pageSize: 25,
+		pageStart: 1,
 		top: true,
 		bottom: true,
 		nextText: 'next',
@@ -407,12 +493,11 @@
 		evenodd: true,
 		filter: [],
 		delimiter: "|",
-		start: function() {},
-		// Before build
-		end: function() {},
-		// After build
-		before: function() {},
-		// Before page turn
+		hash: true,
+		hashQuery: "page",
+		start: function() {}, // Before build
+		end: function() {},	// After build
+		before: function() {}, // Before page turn
 		after: function() {} // After page turn
 	};
 
