@@ -1,6 +1,6 @@
 {
   "name": "staticpager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Static Pager",
   "keywords": [
     "jquery-plugin"
@@ -23,7 +23,7 @@
   ],
   "scripts": {
     "test": "grunt test",
-    "postinsall": "bower install"
+    "postinstall": "bower install"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "~0.7.2",

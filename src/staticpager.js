@@ -8,8 +8,8 @@
  * Passes JSLint!
  */
 
-(function($) {
-	"use strict";
+(function ($) {
+	'use strict';
 
 	// Tweet sized templating (the JSLinted version)
 	// http://mir.aculo.us/2011/03/09/little-helpers-a-tweet-sized-javascript-templating-engine/
@@ -25,7 +25,7 @@
 
 	/* IndexOf polyfill */
 	if (!Array.prototype.indexOf) {
-		Array.prototype.indexOf = function(searchElement, fromIndex) {
+		Array.prototype.indexOf = function (searchElement, fromIndex) {
 			if (this === undefined || this === null) {
 				throw new TypeError('"this" is null or not defined');
 			}
@@ -55,7 +55,7 @@
 		};
 	}
 
-	$.pager = function(el, options) {
+	$.pager = function (el, options) {
 
 		var base = this,
 			i = 0,
@@ -69,30 +69,30 @@
 		base.$el.data('pager', stamp);
 		window.staticpager = [];
 		savePoint = {
-			"id": stamp,
-			"p": base
+			'id': stamp,
+			'p': base
 		};
 		window.staticpager.push(savePoint);
 
 		base.options = $.extend({}, $.pager.defaultOptions, options);
 
-		base.init = function(cat) {
+		base.init = function (cat) {
 
 			base.templates = {
-				"status": '<div class="leftSide">Page <span id="currentPage">{pageIndex}</span> of <span id="maxPage">{pageCount}</span>. Viewing results <span id="resultStart">{resultStart}</span> thru <span id="resultEnd">{resultEnd}</span> of {resultCount}.</div>',
-				"pageList": '<li id="page{pageNum}" class="pagingListItem"><ul id="page{pageNum}List" class="pageList"></ul></li>',
-				"pager": '<div class="rightSide"><a href="javascript:;" class="prev">{prevText}</a></div>',
-				"top": '<div id="topPaging" class="paging"></div>',
-				"bottom": '<div id="bottomPaging" class="paging"></div>',
-				"showAll": '<span><a href="javascript:;" class="showAllItems">Show All</a></span>'
+				'status': '<div class="leftSide">Page <span id="currentPage">{pageIndex}</span> of <span id="maxPage">{pageCount}</span>. Viewing results <span id="resultStart">{resultStart}</span> thru <span id="resultEnd">{resultEnd}</span> of {resultCount}.</div>',
+				'pageList': '<li id="page{pageNum}" class="pagingListItem"><ul id="page{pageNum}List" class="pageList"></ul></li>',
+				'pager': '<div class="rightSide"><a href="javascript:;" class="prev">{prevText}</a></div>',
+				'top': '<div id="topPaging" class="paging"></div>',
+				'bottom': '<div id="bottomPaging" class="paging"></div>',
+				'showAll': '<span><a href="javascript:;" class="showAllItems">Show All</a></span>'
 			};
 
 			base.cache = base.$el.html();
 
 			if (cat && cat.length && cat.length !== 0) {
-				base.$el.find('li').each(function() {
+				base.$el.find('li').each(function () {
 
-					if ($(this).attr('data-filter') !== null && typeof $(this).attr('data-filter') !== "undefined" && $(this).attr('data-filter') !== "") {
+					if ($(this).attr('data-filter') !== null && typeof $(this).attr('data-filter') !== 'undefined' && $(this).attr('data-filter') !== '') {
 
 						var tax = $(this).attr('data-filter').split(base.options.delimiter);
 						var found = false;
@@ -144,7 +144,7 @@
 				$('.prev', base.$el).css('visibility', 'hidden');
 
 				// Watch for events
-				$('.prev, .pager, .next', base.$el).on("click", function() {
+				$('.prev, .pager, .next', base.$el).on('click', function () {
 
 					base.options.before($(this).selector, base);
 
@@ -217,7 +217,7 @@
 
 				});
 
-				$('.showAllItems', base.$el).on('click', function() {
+				$('.showAllItems', base.$el).on('click', function () {
 					/*$('.result', base.$el).each(function(index) {
 					$(this, base.$el).appendTo($('.result-holder'));
 				});
@@ -237,7 +237,7 @@
 
 		};
 
-		base.build = function() {
+		base.build = function () {
 
 			var pageChecker, itemCount, status, z, topPager, bottomPager, key;
 
@@ -341,13 +341,13 @@
 			}
 			$('#tPager1, #bPager1, #top_fEllip, #bot_fEllip', base.$el).css('display', 'none'); //Since we are starting on page 1, we will hide the first paging links in both the top and bottom nav.
 			$('#tInd1, #bInd1', base.$el).css('display', 'inline'); //Since we are starting on page 1, we will reveal the span tag for the first page status in both the top and bottom nav.
-			$('#bottomPaging span[id^="bInd"]', base.$el).each(function(index) {
+			$('#bottomPaging span[id^="bInd"]', base.$el).each(function (index) {
 				if (index !== 0) {
 					$(this).hide();
 				}
 			});
 
-			$('#topPaging span[id^="tInd"]', base.$el).each(function(index) {
+			$('#topPaging span[id^="tInd"]', base.$el).each(function (index) {
 				if (index !== 0) {
 					$(this).hide();
 				}
@@ -370,13 +370,13 @@
 
 		};
 
-		base.destroy = function() {
+		base.destroy = function () {
 
 			base.$el.html(base.cache);
 
 		};
 
-		base.filter = function(cat) {
+		base.filter = function (cat) {
 
 			base.destroy();
 
@@ -406,26 +406,30 @@
 		truncate: false,
 		evenodd: true,
 		filter: [],
-		delimiter: "|",
-		start: function() {},
+		delimiter: '|',
+		start: function () {
+		},
 		// Before build
-		end: function() {},
+		end: function () {
+		},
 		// After build
-		before: function() {},
+		before: function () {
+		},
 		// Before page turn
-		after: function() {} // After page turn
+		after: function () {
+		} // After page turn
 	};
 
 	var methods = {
 
-		init: function(options) {
-			return this.each(function() {
+		init: function (options) {
+			return this.each(function () {
 				var t = new $.pager(this, options);
 				return t;
 			});
 		},
 
-		destroy: function() {
+		destroy: function () {
 			if (window.staticpager) {
 				for (var p in window.staticpager) {
 					if (window.staticpager.hasOwnProperty(p)) {
@@ -437,7 +441,7 @@
 			}
 		},
 
-		update: function(filter) {
+		update: function (filter) {
 			if (window.staticpager) {
 				for (var p in window.staticpager) {
 					if (window.staticpager.hasOwnProperty(p)) {
@@ -451,7 +455,7 @@
 
 	};
 
-	$.fn.pager = function(methodOrOptions) {
+	$.fn.pager = function (methodOrOptions) {
 		if (methods[methodOrOptions]) {
 			return methods[methodOrOptions].apply(this, Array.prototype.slice.call(arguments, 1));
 		} else if (typeof methodOrOptions === 'object' || !methodOrOptions) {
