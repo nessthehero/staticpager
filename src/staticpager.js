@@ -157,8 +157,8 @@
 						base.pIndex = parseInt($(this).text(), 10);
 					}
 
-					$('.pagingListItem', base.$el).addClass('sp-hidden'); //.css('display', 'none'); //Hide every pagingListItem.
-					$('#page' + base.pIndex, base.$el).removeClass('sp-hidden'); //.css('display', 'block'); //Reveal the desired pagingListItem.
+					$('.pagingListItem', base.$el).css('display', 'none'); //Hide every pagingListItem.
+					$('#page' + base.pIndex, base.$el).css('display', 'block'); //Reveal the desired pagingListItem.
 					$('#currentPage', base.$el).text(base.pIndex);
 					$('#resultStart', base.$el).text((base.pIndex * base.options.pageSize) - (base.options.pageSize - 1));
 					if (base.pIndex === base.count.pages) {
@@ -351,7 +351,7 @@
 
 				//Since we are starting on page 1, we will hide all subsequent pages.
 				if (i > 1) {
-					$('#page' + i).addClass('sp-hidden'); //.css('display', 'none');
+					$('#page' + i).css('display', 'none');
 				}
 			}
 			$('#tPager1, #bPager1, #top_fEllip, #bot_fEllip', base.$el).addClass('sp-hidden'); //.css('display', 'none'); //Since we are starting on page 1, we will hide the first paging links in both the top and bottom nav.
@@ -369,8 +369,8 @@
 			});
 
 			$('.paging .rightSide', base.$el).append('<a href="#" class="next">' + base.options.nextText + '</a>'); //Stick a 'next' link on the end. This 1 line works for both top and bottom.
-			$('.pagingListItem', base.$el).addClass('sp-hidden'); //.css('display', 'none'); //Hide every pagingListItem.
-			$('#page' + base.pIndex, base.$el).removeClass('sp-hidden'); //.css('display', 'block'); //Reveal the desired pagingListItem.
+			$('.pagingListItem', base.$el).css('display', 'none'); //Hide every pagingListItem.
+			$('#page' + base.pIndex, base.$el).css('display', 'block'); //Reveal the desired pagingListItem.
 			if (base.options.truncate) {
 				for (key in base.pages) {
 					if (base.pages.hasOwnProperty(key)) {
