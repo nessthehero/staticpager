@@ -1,56 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Static Pager</title>
- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<meta charset="utf-8">
+	<title>Static Pager</title>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
-  <script src="src/staticpager.js"></script>
+	<script src="src/staticpager.js"></script>
 
-  <style type="text/css">
+	<style type="text/css">
 
+		.bInd,
+		.pager,
+		.next {
+			margin-left: 0.5em;
+		}
 
-  .bInd,
-  span,
-  .pager,
-  .next {
-    margin-left: 0.5em;
-  }
+		.bInd {
+			font-weight: 700;
+		}
 
-  .bInd {
-    font-weight: 700;
-  }
+		.disabled {
+			cursor: not-allowed;
+			color: gray;
+		}
 
-  .disabled {
-    cursor: not-allowed;
-    color: gray;
-  }
+		.sp-hidden {
+			display: none;
+		}
 
-
-  </style>
+	</style>
 </head>
 <body>
-    <div id="pager">
-      <ul>
-        <li data-filter="2">Item 1</li>
-        <li data-filter="2|3">Item 2</li>
-        <li data-filter="4|6">Item 3</li>
-        <li data-filter="7">Item 4</li>
-        <li data-filter="">Item 5</li>
-        <li data-filter="8">Item 6</li>
-        <li data-filter="2">Item 7</li>
-      </ul>
-    </div>
-    <script type="text/javascript">
+	<div id="pager">
+		<ul>
+			<li data-filter="2">Item 1</li>
+			<li data-filter="2|3">Item 2</li>
+			<li data-filter="4|6">Item 3</li>
+			<li data-filter="7">Item 4</li>
+			<li data-filter="">Item 5</li>
+			<li data-filter="8">Item 6</li>
+			<li data-filter="2">Item 7</li>
+		</ul>
+	</div>
+	<script type="text/javascript">
 
-      $(function () {
+		$(function () {
 
-        var p = $('#pager').pager({
-          pageSize: 2
-        });
+			var p = $('#pager').pager({
+				pageSize: 2,
+				short: true
+			});
 
-      });
+		});
 
-    </script>
+	</script>
 </body>
 </html>
