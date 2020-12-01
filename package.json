@@ -1,6 +1,6 @@
 {
   "name": "staticpager",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Static Pager",
   "keywords": [
     "jquery-plugin"
@@ -21,6 +21,7 @@
       "type": "MIT"
     }
   ],
+  "main": "src/staticpager.js",
   "scripts": {
     "test": "grunt test",
     "postinstall": "bower install"
