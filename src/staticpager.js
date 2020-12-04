@@ -179,8 +179,8 @@
 						$('.next', base.$el).addClass('sp-hidden'); //.css('visibility', 'hidden');
 						$('.prev', base.$el).removeClass('sp-hidden'); //.css('visibility', 'visible');
 					} else if (base.pIndex === 1) {
-						$('.next', base.$el).addClass('sp-hidden'); //.css('visibility', 'visible');
-						$('.prev', base.$el).removeClass('sp-hidden'); //.css('visibility', 'hidden');
+						$('.next', base.$el).removeClass('sp-hidden'); //.css('visibility', 'visible');
+						$('.prev', base.$el).addClass('sp-hidden'); //.css('visibility', 'hidden');
 					} else {
 						$('.next', base.$el).removeClass('sp-hidden'); //.css('visibility', 'visible');
 						$('.prev', base.$el).removeClass('sp-hidden'); //.css('visibility', 'visible');
