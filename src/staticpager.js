@@ -79,8 +79,10 @@
 		base.init = function (cat) {
 
 			base.templates = {
-				'shortStatus': '<div class="leftSide"><span id="resultStart">{resultStart}</span>-<span id="resultEnd">{resultEnd}</span> of {resultCount}.</div>',
-				'status': '<div class="leftSide">Page <span id="currentPage">{pageIndex}</span> of <span id="maxPage">{pageCount}</span>. Viewing results <span id="resultStart">{resultStart}</span> thru <span id="resultEnd">{resultEnd}</span> of {resultCount}.</div>',
+				'shortStatus': '<div class="leftSide"><span id="resultSpan"><span id="resultStart">{resultStart}</span>-<span id="resultEnd">{resultEnd}</span></span> of {resultCount}</div>',
+				'shortStatusOne': '<div class="leftSide"><span id="resultSpan"><span id="resultStart">{resultStart}</span></span> of {resultCount}</div>',
+				'status': '<div class="leftSide">Page <span id="currentPage">{pageIndex}</span> of <span id="maxPage">{pageCount}</span>. Viewing results <span id="resultSpan"><span id="resultStart">{resultStart}</span> thru <span id="resultEnd">{resultEnd}</span></span> of {resultCount}.</div>',
+				'statusOne': '<div class="leftSide">Page <span id="currentPage">{pageIndex}</span> of <span id="maxPage">{pageCount}</span>. Viewing result <span id="resultSpan"><span id="resultStart">{resultStart}</span></span> of {resultCount}.</div>',
 				'pageList': '<li id="page{pageNum}" class="pagingListItem"><ul id="page{pageNum}List" class="pageList"></ul></li>',
 				'pager': '<div class="rightSide"><a href="javascript:;" class="prev">{prevText}</a></div>',
 				'top': '<div id="topPaging" class="paging"></div>',
@@ -160,12 +162,17 @@
 					$('.pagingListItem', base.$el).css('display', 'none'); //Hide every pagingListItem.
 					$('#page' + base.pIndex, base.$el).css('display', 'block'); //Reveal the desired pagingListItem.
 					$('#currentPage', base.$el).text(base.pIndex);
-					$('#resultStart', base.$el).text((base.pIndex * base.options.pageSize) - (base.options.pageSize - 1));
+
+					var resultStart = (base.pIndex * base.options.pageSize) - (base.options.pageSize - 1);
+					var resultEnd = resultStart;
 					if (base.pIndex === base.count.pages) {
-						$('#resultEnd', base.$el).text(base.count.results);
+						resultEnd = base.count.results;
 					} else {
-						$('#resultEnd', base.$el).text(base.pIndex * base.options.pageSize);
+						resultEnd = base.pIndex * base.options.pageSize;
 					}
+
+					$('#resultStart', base.$el).text(resultStart);
+					$('#resultEnd', base.$el).text(resultEnd);
 
 					//Just some logic for handling the first and last pages.
 					if (base.pIndex === base.count.pages) {
@@ -279,23 +286,49 @@
 			// Prepare the paging status in case it is needed. We are also turning it into a jQuery object.
 			if (base.options.short) {
 
-				status = $(t(base.templates.shortStatus, {
-					pageIndex: base.pIndex,
-					pageCount: base.count.pages,
-					resultStart: 1, // #HASH: Will change based on Hash or options. Set to Hash or option's value.
-					resultEnd: base.options.pageSize, // #HASH: Will change based on Hash or options. Multiplied by Hash/option value and self
-					resultCount: base.count.results
-				}));
+				if (base.options.pageSize === 1) {
+
+					status = $(t(base.templates.shortStatusOne, {
+						pageIndex: base.pIndex,
+						pageCount: base.count.pages,
+						resultStart: 1, // #HASH: Will change based on Hash or options. Set to Hash or option's value.
+						resultCount: base.count.results
+					}));
+
+				} else {
+
+					status = $(t(base.templates.shortStatus, {
+						pageIndex: base.pIndex,
+						pageCount: base.count.pages,
+						resultStart: 1, // #HASH: Will change based on Hash or options. Set to Hash or option's value.
+						resultEnd: base.options.pageSize, // #HASH: Will change based on Hash or options. Multiplied by Hash/option value and self
+						resultCount: base.count.results
+					}));
+
+				}
 
 			} else {
 
-				status = $(t(base.templates.status, {
-					pageIndex: base.pIndex,
-					pageCount: base.count.pages,
-					resultStart: 1, // #HASH: Will change based on Hash or options. Set to Hash or option's value.
-					resultEnd: base.options.pageSize, // #HASH: Will change based on Hash or options. Multiplied by Hash/option value and self
-					resultCount: base.count.results
-				}));
+				if (base.options.pageSize === 1) {
+
+					status = $(t(base.templates.statusOne, {
+						pageIndex: base.pIndex,
+						pageCount: base.count.pages,
+						resultStart: 1, // #HASH: Will change based on Hash or options. Set to Hash or option's value.
+						resultCount: base.count.results
+					}));
+
+				} else {
+
+					status = $(t(base.templates.status, {
+						pageIndex: base.pIndex,
+						pageCount: base.count.pages,
+						resultStart: 1, // #HASH: Will change based on Hash or options. Set to Hash or option's value.
+						resultEnd: base.options.pageSize, // #HASH: Will change based on Hash or options. Multiplied by Hash/option value and self
+						resultCount: base.count.results
+					}));
+
+				}
 
 			}
 
