@@ -147,7 +147,12 @@
 				$('.prev', base.$el).addClass('sp-hidden'); // css('visibility', 'hidden');
 
 				// Watch for events
-				$('.prev, .pager, .next', base.$el).on('click', function () {
+				$('.prev, .pager, .next', base.$el).on('click keyup', function (e) {
+
+					// Do not page if button has been disabled.
+					if ($(this).hasClass('sp-hidden')) {
+						return false;
+					}
 
 					base.options.before($(this).selector, base);
 
