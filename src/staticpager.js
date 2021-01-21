@@ -76,6 +76,8 @@
 
 		base.options = $.extend({}, $.pager.defaultOptions, options);
 
+		base.inMotion = false;
+
 		base.init = function (cat) {
 
 			base.templates = {
@@ -154,6 +156,18 @@
 						return false;
 					}
 
+					// If any key other than enter was pressed, do not page.
+					if (typeof e.keyCode !== 'undefined' && e.keyCode !== 13) {
+						return false;
+					}
+
+					// Avoid multiple actions from keypress
+					if (base.inMotion) {
+						return false;
+					}
+
+					base.inMotion = true;
+
 					base.options.before($(this).selector, base);
 
 					if ($(this).attr('class').indexOf('prev') !== -1) {
@@ -225,6 +239,8 @@
 					}
 
 					base.options.after($(this).selector, base);
+
+					setTimeout(function () { base.inMotion = false; }, 200);
 
 					return false;
 
